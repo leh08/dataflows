@@ -1,0 +1,32 @@
+{
+    "mailgun_failed_load_api_key": "Failed to load MailGun API key.",
+    "mailgun_failed_load_domain": "Failed to load MailGun domain.",
+    "mailgun_error_send_email": "Error in sending confirmation email, user registration failed.",
+    
+    "confirmation_confirmed": "User confirmed.",
+    "confirmation_not_found": "Confirmation reference not found.",
+    "confirmation_link_expired": "The link has expired.",
+    "confirmation_already_confirmed": "Signup has already been confirmed.",
+
+    "flow_name_exists": "A flow with name '{}' already exists.",
+    "flow_error_inserting": "An error occurred while inserting the flow.",
+    "flow_not_found": "Flow not found.",
+    "flow_deleted": "Flow deleted.",
+
+    "log_not_found": "Log not found.",
+
+    "user_email_exists": "A user with that email already exists.",
+    "user_not_found": "User not found.",
+    "user_deleted": "User deleted.",
+    "user_invalid_credentials": "Invalid credentials!",
+    "user_logged_out": "User {} successfully logged out.",
+    "user_not_confirmed": "You have not confirmed registration, please check your email <{}>.",
+    "user_error_creating": "Internal server error. Failed to create user.",
+    "user_signed_up": "Account created successfully, an email with an activation link has been sent to your email address, please check.",
+    "user_already_confirmed": "User has already been confirmed.",
+    "user_resend_successful": "Email confirmation successfully resent.",
+    "user_resend_fail": "Internal server error. Failed to resend confirmation email.",
+    
+    "file_uploaded": "File '{}' uploaded.",
+    "file_illegal_extension": "Extension '{}' is not allowed."
+}
