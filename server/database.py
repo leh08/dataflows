@@ -18,7 +18,7 @@ def init_db():
     # they will be registered properly on the metadata.  Otherwise
     # you will have to import them first before calling init_db()
     from models.source import SourceModel
-    from models.authentication import AuthenticationModel
+    from models.authorization import AuthorizationModel
     from models.flow import FlowModel
     from models.log import LogModel
     from models.user import UserModel
@@ -36,17 +36,15 @@ def init_db():
     db_session.add(database)
     file = SourceModel(name='File')
     db_session.add(file)
-    database = SourceModel(name='Database')
-    db_session.add(database)
     db_session.commit()
     
-    default_credential = AuthenticationModel(
+    default_credential = AuthorizationModel(
         name='PHD Media',
         credential={
             "aws_access_key_id": os.environ["AWS_ACCESS_KEY_ID"],
             "aws_secret_access_key": os.environ["AWS_SECRET_ACCESS_KEY"]
         },
-        source_id = s3.id
+        source = s3
     )
     db_session.add(default_credential) 
     db_session.commit()

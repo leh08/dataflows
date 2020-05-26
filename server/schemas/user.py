@@ -1,16 +1,11 @@
-from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
-from marshmallow import pre_dump
+from schema import BaseSchema
+from marshmallow.fields import Nested
 from models.user import UserModel
+from models.confirmation import ConfirmationModel
+from schemas.confirmation import ConfirmationSchema
 
 
-class UserSchema(SQLAlchemyAutoSchema):
-    class Meta:
+class UserSchema(BaseSchema):
+    class Meta(BaseSchema.Meta):
         model = UserModel
         load_only = ["password"]
-        dump_only = ["id", 'confirmation']
-        load_instance = True
-        
-    @pre_dump
-    def _pre_dump(self, user: UserModel):
-        user.confirmation = [user.most_recent_confirmation]
-        return user

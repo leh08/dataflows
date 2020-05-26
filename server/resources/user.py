@@ -53,16 +53,10 @@ class Signup(Resource):
         
         try:
             user.save_to_db()
-            access_token = create_access_token(identity=user.id, fresh=True)
-            refresh_token = create_refresh_token(user.id)
             confirmation = ConfirmationModel(user.id)
             confirmation.save_to_db()
             user.send_confirmation_email()
-            return {
-                "access_token": access_token,
-                "refresh_token": refresh_token,
-                "message": gettext("user_signed_up"),
-            }, 201
+            return {"message": gettext("user_signed_up")}, 201
         
         except MailGunException as error:
             user.delete_from_db()

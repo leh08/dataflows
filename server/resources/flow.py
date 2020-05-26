@@ -14,15 +14,6 @@ class FlowList(Resource):
     def get(cls):
         return {"flows": flow_list_schema.dump(FlowModel.find_all())}, 200
     
-
-class Flow(Resource):
-    @classmethod
-    def get(cls, flow_id: int):
-        flow = FlowModel.find_by_id(flow_id)
-        if flow:
-            return flow_schema.dump(flow), 200
-        return {"message": gettext("flow_not_found")}, 404    
-    
     @classmethod
     @jwt_required
     def post(cls):
@@ -44,12 +35,22 @@ class Flow(Resource):
 
         return flow_schema.dump(flow), 201
     
+
+class Flow(Resource):
     @classmethod
-    def put(cls, flow_id: int):
+    def get(cls, flow_id: int):
+        flow = FlowModel.find_by_id(flow_id)
+        if flow:
+            return flow_schema.dump(flow), 200
+        return {"message": gettext("flow_not_found")}, 404
+    
+    @classmethod
+    def patch(cls, flow_id: int):
         flow_json = request.get_json()
         flow = FlowModel.find_by_id(flow_id)
-
+        
         if flow:
+            flow.name = flow_json["name"]
             flow.report = flow_json["report"]
         else:
             flow_json["flow_id"] = flow_id

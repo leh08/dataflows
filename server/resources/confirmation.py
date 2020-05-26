@@ -22,8 +22,4 @@ class Confirmation(Resource):
         confirmation.confirmed = True
         confirmation.save_to_db()
         
-        return redirect(
-            "http://localhost:3000",
-            code=302,
-            Response={"message": gettext("confirmation_confirmed")}
-        )
+        return {"message": gettext("confirmation_confirmed")}

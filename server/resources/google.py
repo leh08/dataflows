@@ -1,19 +1,23 @@
+from flask import redirect, request
 from flask_restful import Resource
-from oauth import oauth
 
+"""
+Use google-api-python-client library for Google is
+easiest way. rather than OAuthlib
+"""
 
 class GoogleLogin(Resource):
     @classmethod
     def get(cls):
-        google = oauth.create_client('google')
-        redirect_uri = "http://localhost:5000/google/login/authorized"
-        return google.authorize_redirect(redirect_uri)
-    
+        authorization_url = ""
+        return redirect(
+            authorization_url,
+            code=302,
+            Response={"message": gettext("confirmation_confirmed")}
+        )
 
 class GoogleAuthorize(Resource):
     @classmethod
     def get(cls):
-        google = oauth.create_client('google')
-        token = google.authorize_access_token()
-        google_user = google.get("oauth2/v3/userinfo", token=token)
-        return google_user.json()
+        authorization_response = request.url
+        

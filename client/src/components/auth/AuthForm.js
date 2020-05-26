@@ -19,16 +19,6 @@ class AuthForm extends React.Component {
                 'Authorization': `Bearer ${this.props.refreshToken}`
             } }).then(response => console.log(response.data))
         }
-        // window.gapi.load("client:auth2", () => {
-        //     window.gapi.client.init({
-        //         clientId: "1008588534108-rlb0vvmsd0t5ob3oh2ltt8n3c0jtumm9.apps.googleusercontent.com",
-        //         scope: "email" 
-        //     }).then(() => {
-        //         this.auth = window.gapi.auth2.getAuthInstance();
-        //         this.onAuthChange(this.auth.isSignedIn.get());
-        //         this.auth.isSignedIn.listen(this.onAuthChange);
-        //     });
-        // });
     }
 
     onAuthChange = (isSignedIn) => {

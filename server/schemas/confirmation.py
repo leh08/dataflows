@@ -1,10 +1,8 @@
-from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
+from schema import BaseSchema
 from models.confirmation import ConfirmationModel
 
 
-class ConfirmationSchema(SQLAlchemyAutoSchema):
-    class Meta:
+class ConfirmationSchema(BaseSchema):
+    class Meta(BaseSchema.Meta):
         model = ConfirmationModel
         load_only = ["user"]
-        dump_only = ["id", "expired_at", "confirmed"]
-        include_fk = True

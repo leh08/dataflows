@@ -1,10 +1,9 @@
 Flask
 python-dotenv
 Flask-RESTful
-Flask-SQLAlchemy
+SQLAlchemy
 Flask-JWT-Extended
 Marshmallow
 Marshmallow-SQLAlchemy
 Flask-Uploads
-Authlib
 Alembic

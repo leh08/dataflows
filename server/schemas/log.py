@@ -1,11 +1,8 @@
-from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
+from schema import BaseSchema
 from models.flow import FlowModel
 from models.log import LogModel
 
 
-class LogSchema(SQLAlchemyAutoSchema):
-    class Meta:
+class LogSchema(BaseSchema):
+    class Meta(BaseSchema.Meta):
         model = LogModel
-        dump_only = ["id"]
-        include_fk = True
-        load_instance = True

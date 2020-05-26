@@ -1,11 +1,10 @@
+import _ from 'lodash';
 import axios from 'axios';
 import flows from '../apis/flows';
 import history from '../history';
 import { 
     AUTH_USER,
     AUTH_ERROR,
-    SIGN_IN,
-    SIGN_OUT,
     CREATE_FLOW,
     FETCH_FLOWS,
     FETCH_FLOW,
@@ -16,17 +15,6 @@ import {
 export const signUp = (formProps) => async dispatch => {
     try {
         const response =  await axios.post('http://localhost:5000/signup', formProps);
-        const { access_token, refresh_token } = response.data
-
-        dispatch({ type: AUTH_USER, payload: {
-             accessToken: access_token,
-             refreshToken: refresh_token,
-             isSignedIn: true,
-        } });
-        
-        localStorage.setItem('accessToken', access_token)
-        localStorage.setItem('refreshToken', refresh_token)
-        localStorage.setItem('isSignedIn', true)
         history.push("/flows");
     } catch (e) {
         dispatch({ type: AUTH_ERROR, payload: "Email in use" });
@@ -68,19 +56,6 @@ export const logIn = (formProps) => async dispatch => {
     } catch (e) {
         dispatch({ type: AUTH_ERROR, payload: "Invalid login credentials" });
     }
-};
-
-export const signIn = (userId) => {
-    return {
-        type: SIGN_IN,
-        payload: userId
-    };
-};
-
-export const signOut = () => {
-    return {
-        type: SIGN_OUT
-    };
 };
 
 export const createFlow = (formValues) => async (dispatch, getState) => {

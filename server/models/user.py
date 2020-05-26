@@ -14,13 +14,13 @@ class UserModel(Base):
     email = Column(String(80), nullable=False, unique=True)
     password = Column(String(80), nullable=False)
     
-    confirmation = relationship(
-        'ConfirmationModel', lazy="dynamic", cascade="all, delete-orphan"
+    confirmations = relationship(
+        'ConfirmationModel', lazy="dynamic", cascade='delete,all'
     )
 
     @property
     def most_recent_confirmation(self) -> "ConfirmationModel":
-        return self.confirmation.order_by(ConfirmationModel.expire_at.desc()).first()
+        return self.confirmations.order_by(ConfirmationModel.expire_at.desc()).first()
 
     @classmethod
     def find_by_email(cls, email: str) -> "UserModel":

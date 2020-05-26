@@ -11,18 +11,16 @@ class FlowList extends React.Component {
     }
 
     renderAdmin(flow) {
-        if (flow.userId === this.props.currentUserId) {
-            return (
-                <div className="right floated content">
-                    <Link to={`/flows/edit/${flow.id}`} className="ui button primary">
-                        Edit
-                    </Link>
-                    <Link to={`/flows/delete/${flow.id}`} className="ui button negative">
-                        Delete
-                    </Link>
-                </div>
-            );
-        }
+        return (
+            <div className="right floated content">
+                <Link to={`/flows/edit/${flow.id}`} className="ui button primary">
+                    Edit
+                </Link>
+                <Link to={`/flows/delete/${flow.id}`} className="ui button negative">
+                    Delete
+                </Link>
+            </div>
+        );
     }
 
     renderList() {

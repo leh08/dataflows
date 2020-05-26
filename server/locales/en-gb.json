@@ -7,6 +7,16 @@
     "confirmation_not_found": "Confirmation reference not found.",
     "confirmation_link_expired": "The link has expired.",
     "confirmation_already_confirmed": "Signup has already been confirmed.",
+    
+    "source_name_exists": "A source with name '{}' already exists.",
+    "source_error_inserting": "An error occurred while inserting the source.",
+    "source_not_found": "Source not found.",
+    "source_deleted": "Source deleted.",
+    
+    "authorization_name_exists": "A authorization with name '{}' already exists.",
+    "authorization_error_inserting": "An error occurred while inserting the authorization.",
+    "authorization_not_found": "Authorization not found.",
+    "authorization_deleted": "Authorization deleted.",
 
     "flow_name_exists": "A flow with name '{}' already exists.",
     "flow_error_inserting": "An error occurred while inserting the flow.",
