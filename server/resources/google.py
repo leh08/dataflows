@@ -22,8 +22,9 @@ class GoogleAuthorize(Resource):
     @classmethod
     def get(cls):
         authorization_response = request.url
-        token = OAuth('google').get_token(authorization_response)
-        client = OAuth('google').create_client(token)
+        google = OAuth('google')
+        token = google.get_token(authorization_response)
+        client = google.create_client(token)
         response = client.get('https://www.googleapis.com/oauth2/v1/userinfo')
 
         return response.json()
