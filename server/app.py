@@ -18,6 +18,7 @@ from resources.source import SourceList, Source
 from resources.authorization import AuthorizationList, Authorization
 from resources.flow import FlowList, Flow
 from resources.file import Upload
+from resources.google import GoogleLogin, GoogleAuthorize
 from services.uploads import UPLOAD_SET
 
 app = Flask(__name__)
@@ -61,6 +62,8 @@ api.add_resource(CurrentUser, "/user")
 api.add_resource(Resend, "/resend")
 api.add_resource(Confirmation, "/confirmation/<string:confirmation_id>")
 api.add_resource(Upload, "/upload/<string:flow_name>")
+api.add_resource(GoogleLogin, "/google/login")
+api.add_resource(GoogleAuthorize, "/google/login/authorized")
 
 if __name__ == "__main__":
     init_db()
