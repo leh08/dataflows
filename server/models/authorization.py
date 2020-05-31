@@ -3,7 +3,6 @@ from database import Base, db_session
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, JSON
 from sqlalchemy.orm import relationship
 from datetime import datetime
-
 import pytz
 
 

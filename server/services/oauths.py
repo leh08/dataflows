@@ -1,7 +1,10 @@
 from functools import partial
 from flask import session
-from auths.oauth import configs
 from requests_oauthlib import OAuth2Session
+
+from models.source import SourceModel
+from models.authorization import AuthorizationModel
+from auths.oauth import configs
 
 
 class OAuth:
@@ -134,5 +137,21 @@ class OAuthService:
 
         return token
     
-oauth = OAuth()
-oauth.register_service('google')
+    
+def token_fetcher(name, account):
+    source = SourceModel.find_by_name(name)
+    authorization = source.find_authorization_by_name(account)
+    
+    if authorization:
+        return authorization.credential
+    
+    else:
+        return None
+
+def token_updater(token, name, account=None):
+    source = SourceModel.find_by_name(name)
+    authorization = AuthorizationModel(name=account, credential=token, source=source)
+    authorization.save_to_db()
+    
+oauth = OAuth(token_fetcher=token_fetcher, token_updater=token_updater)
+oauth.register_service('Google')

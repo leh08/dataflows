@@ -24,8 +24,10 @@ class SourceModel(Base):
     @classmethod
     def find_all(cls) -> List["SourceModel"]:
         return cls.query.all()
-
     
+    def find_authorization_by_name(self, name):
+        return self.authorizations.filter_by(name=name).first()
+        
     def save_to_db(self) -> None:
         db_session.add(self)
         db_session.commit()
