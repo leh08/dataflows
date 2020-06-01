@@ -6,4 +6,5 @@ Flask-JWT-Extended
 Marshmallow
 Marshmallow-SQLAlchemy
 Requests-OAuthlib
+Alembic
 Flask-Uploads
