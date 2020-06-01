@@ -5,8 +5,6 @@ from flask_cors import CORS
 from marshmallow import ValidationError
 from flask_uploads import configure_uploads, patch_request_class
 
-#from dotenv import load_dotenv
-#load_dotenv(".env", verbose=True)
 from database import db_session, init_db, restart_db
 from blacklist import BLACKLIST
 from resources.user import (
