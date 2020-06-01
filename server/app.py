@@ -2,11 +2,12 @@ from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
-from marshmallow import ValidationError
 from flask_uploads import configure_uploads, patch_request_class
 
+from marshmallow import ValidationError
 from database import db_session, init_db, restart_db
 from blacklist import BLACKLIST
+
 from resources.user import (
     User, Signup, Login, Logout, TokenRefresh, CurrentUser, Resend
 )
@@ -17,6 +18,7 @@ from resources.authorization import AuthorizationList, Authorization
 from resources.flow import FlowList, Flow
 from resources.file import Upload
 from resources.google import GoogleLogin, GoogleAuthorize
+
 from services.uploads import UPLOAD_SET
 
 app = Flask(__name__)
