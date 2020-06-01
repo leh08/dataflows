@@ -13,7 +13,7 @@ class UserModel(Base):
     id = Column(Integer, primary_key=True)
     email = Column(String(80), nullable=False, unique=True)
     password = Column(String(80), nullable=False)
-    
+
     confirmations = relationship(
         'ConfirmationModel', lazy="dynamic", cascade='delete,all'
     )

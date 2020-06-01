@@ -7,4 +7,3 @@ Marshmallow
 Marshmallow-SQLAlchemy
 Requests-OAuthlib
 Flask-Uploads
-Alembic

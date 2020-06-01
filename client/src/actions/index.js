@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import axios from 'axios';
 import flows from '../apis/flows';
 import history from '../history';
@@ -14,7 +13,7 @@ import {
 
 export const signUp = (formProps) => async dispatch => {
     try {
-        const response =  await axios.post('http://localhost:5000/signup', formProps);
+        await axios.post('http://localhost:5000/signup', formProps);
         history.push("/flows");
     } catch (e) {
         dispatch({ type: AUTH_ERROR, payload: "Email in use" });

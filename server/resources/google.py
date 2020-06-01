@@ -12,7 +12,7 @@ easiest way. rather than OAuthlib
 class GoogleLogin(Resource):
     @classmethod
     def get(cls):
-        authorization_url = oauth.get_service('google').get_authorization_url()
+        authorization_url = oauth.get_service('Google').get_authorization_url()
         
         return redirect(
             authorization_url,
@@ -24,15 +24,15 @@ class GoogleAuthorize(Resource):
     @classmethod
     def get(cls):
         authorization_response = request.url
-        google = oauth.get_service('google')
+        google = oauth.get_service('Google')
         token = google.get_token(authorization_response)
-        client = google.create_client(token, account='giang.lh0469@gmail.com')
+        client = google.create_client(token)
         response = client.get('https://www.googleapis.com/oauth2/v3/userinfo')
         
         data_json = response.json()
         
-        google = SourceModel.find_by_name('Google')
-        authorization = AuthorizationModel(name=data_json['email'], credential=token, source=google)
+        source = SourceModel.find_by_name('Google')
+        authorization = AuthorizationModel(name=data_json['email'], credential=token, source=source)
         authorization.save_to_db()
-        
-        return response.json()
+
+        return data_json

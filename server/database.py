@@ -23,10 +23,20 @@ def init_db():
     from models.log import LogModel
     from models.user import UserModel
     from models.confirmation import ConfirmationModel
+
+    Base.metadata.create_all(bind=engine)
+   
+def restart_db():
+    from models.source import SourceModel
+    from models.authorization import AuthorizationModel
+    from models.flow import FlowModel
+    from models.log import LogModel
+    from models.user import UserModel
+    from models.confirmation import ConfirmationModel
     
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
-
+    
     # Create the fixtures
     s3 = SourceModel(name='S3')
     db_session.add(s3)
