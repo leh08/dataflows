@@ -8,9 +8,7 @@ from marshmallow import ValidationError
 from database import db_session, init_db, restart_db
 from blacklist import BLACKLIST
 
-from resources.user import (
-    User, Signup, Login, Logout, TokenRefresh, CurrentUser, Resend
-)
+from resources.user import User, Signup, Login, Logout, TokenRefresh, CurrentUser, Resend
 from resources.confirmation import Confirmation
 from resources.log import LogList, Log
 from resources.source import SourceList, Source
@@ -26,11 +24,11 @@ app = Flask(__name__)
 app.config.from_pyfile("default_config.py")
 # Update new parameters in config
 app.config.from_envvar("APPLICATION_SETTINGS")
-patch_request_class(app, 10 * 1024 * 1024 * 1024) # 10GB max size upload
-configure_uploads(app, UPLOAD_SET)
 api = Api(app)
 jwt = JWTManager(app)
 CORS(app)
+patch_request_class(app, 10 * 1024 * 1024 * 1024) # 10GB max size upload
+configure_uploads(app, UPLOAD_SET)
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
@@ -66,6 +64,9 @@ api.add_resource(GoogleLogin, "/google/login")
 api.add_resource(GoogleAuthorize, "/google/login/authorized")
 
 if __name__ == "__main__":
-    restart_db()
-    app.run(port=5000)
+    if app.debug:
+        restart_db()
+    else:
+        init_db()
 
+    app.run(port=5000)
