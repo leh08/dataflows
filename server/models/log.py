@@ -7,7 +7,6 @@ class LogModel(Base):
     __tablename__ = "logs"
 
     id = Column(Integer, primary_key=True)
-    file = Column(String)
     message = Column(String(80), nullable=False)
     date = Column(DateTime, default=func.now()) # the current timestamp
     status = Column(String)

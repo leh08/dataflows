@@ -11,7 +11,6 @@ class SQLAlchemyHandler(logging.Handler):
         if exc_info:
             trace = traceback.format_exc(exc_info)
         log = LogModel(
-            file=record.file,
             message=record.message,
             status=record.status,
             flow_id=record.flow_id,
