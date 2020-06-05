@@ -1,6 +1,6 @@
 import os
 
-configs = {
+oauth_configs = {
     "Google": {
         "client_id": os.environ["GOOGLE_CLIENT_ID"],
         "client_secret": os.environ["GOOGLE_CLIENT_SECRET"],

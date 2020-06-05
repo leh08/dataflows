@@ -4,7 +4,7 @@ from requests_oauthlib import OAuth2Session
 
 from models.source import SourceModel
 from models.authorization import AuthorizationModel
-from auths.oauth import configs
+from configs.auths.oauth import oauth_configs
 
 
 class OAuth:
@@ -27,7 +27,7 @@ class OAuth:
         token_url=None,
         base_url=None,
     ):  
-        config = configs.get(name)
+        config = oauth_configs.get(name)
 
         service = OAuthService(
             name,
