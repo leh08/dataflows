@@ -55,6 +55,7 @@ import io
 
 class FlowModel(Base):
     __tablename__ = 'flows'
+    
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False, unique=True)
     report = Column(String, nullable=False)
