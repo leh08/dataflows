@@ -1,9 +1,6 @@
 from typing import List
 from database import Base, db_session
-from sqlalchemy import Column, DateTime, Integer, String, ForeignKey
-from datetime import datetime
-
-import pytz
+from sqlalchemy import Column, DateTime, Integer, String, func, ForeignKey
 
 
 class LogModel(Base):
@@ -12,8 +9,9 @@ class LogModel(Base):
     id = Column(Integer, primary_key=True)
     file = Column(String)
     message = Column(String(80), nullable=False)
-    date = Column(DateTime, default=datetime.now(tz=pytz.timezone("NZ"))) # the current timestamp
+    date = Column(DateTime, default=func.now()) # the current timestamp
     status = Column(String)
+    
     flow_id = Column(Integer, ForeignKey("flows.id"), nullable=False)
 
     @classmethod

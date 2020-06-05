@@ -1,24 +1,15 @@
 import logging
-import traceback
-from backend.models.log import Log
-from backend.database import db_session
+from models.flow import FlowModel
 
 
-class SQLAlchemyHandler(logging.Handler):
-    # A very basic logger that commits a LogRecord to the SQL Db
-    def emit(self, record):
-        trace = None
-        exc = record.exc_info
-        if exc:
-            trace = traceback.format_exc(exc)
-        log = Log(
-            logger=record.name,
-            level=record.levelname,
-            trace=trace,
-            msg=record.msg,
-            file=record.file,
-            status=record.status,
-            flow_id=record.flow_id,
-            )
-        db_session.add(log)
-        db_session.commit()
+def create_logger(flow_id, status='In Progress'):
+    flow = FlowModel.find_by_id(flow_id)
+    logger = logging.getLogger('Flow.' + flow.name)
+    
+    return logging.LoggerAdapter(
+        logger,
+        extra = {
+            "status": status,
+            "flow_id": flow_id,
+        }
+    )

@@ -35,15 +35,15 @@
 #        db_session.delete(self)
 #        db_session.commit()
 
-
-from database import Base
+from typing import List
+from database import Base, db_session
 from models.log import LogModel
 from log.logger import get_logger
 from filesystem import FileSystem
 from parsers.pandas_parser import PandasParser
 from stores.redshift import Redshift
 from scheduler import scheduler
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Boolean
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Boolean, func
 from sqlalchemy.orm import relationship
 from datetime import datetime, date, time, timedelta
 from concurrent.futures import ThreadPoolExecutor
@@ -51,7 +51,6 @@ from concurrent.futures import ThreadPoolExecutor
 import re
 import gzip
 import io
-import pytz
 
 
 class FlowModel(Base):
@@ -70,7 +69,7 @@ class FlowModel(Base):
     time_unit = Column(Integer)
     sql_script = Column(String)
     status = Column(String, default='Active')
-    created_on = Column(DateTime, default=datetime.now(tz=pytz.timezone("NZ")))
+    created_on = Column(DateTime, default=func.now())
 
     source_id = Column(Integer, ForeignKey('sources.id'))
     source = relationship('SourceModel')
@@ -86,6 +85,22 @@ class FlowModel(Base):
     
     def get_all_logs_by_status(self, status):
         self.logs.filter_by(status=status).all()
+        
+    @classmethod
+    def find_by_id(cls, _id: str) -> "FlowModel":
+        return cls.query.filter_by(id=_id).first()
+    
+    @classmethod
+    def find_all(cls) -> List["FlowModel"]:
+        return cls.query.all()
+    
+    def save_to_db(self) -> None:
+        db_session.add(self)
+        db_session.commit()
+        
+    def delete_from_db(self) -> None:
+        db_session.delete(self)
+        db_session.commit()
     
     def schedule(self):
         params = dict()
@@ -101,7 +116,7 @@ class FlowModel(Base):
 
 
     def run(self):
-        self.logger = get_logger(self.name, status="In Progress", flow_id=self.id)
+        self.logger = get_logger(self.id, status="In Progress")
         self.fs = FileSystem()
         self.service = self.get_service()
         self.parser = self.get_parser()
