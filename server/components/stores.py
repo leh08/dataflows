@@ -1,18 +1,10 @@
 from services.redshift import Redshift
 
-
-class Store:
-    def __init__(self, name):
-        self.name = name
+def get_store(name):
+    if name == 'Redshift':
+        return Redshift()
     
-    def create_store(self):
-       def get_store(self):
-            target = self.target
-            
-            if target == 'Redshift':
-                return Redshift()
-            
-            else:
-                raise ValueError("A target, " + target + ", wasn't set up to run in this system.")
+    else:
+        raise ValueError("A target, " + name + ", wasn't set up to run in this system.")
              
 

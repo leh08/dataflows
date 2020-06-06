@@ -1,18 +1,12 @@
 from services.pandas_parser import PandasParser
 
+def get_parser(parser_name):
+    """ Get a parser for preparing and transforming a report """
+    parser_name = parser_name
 
-class Parser:
-    def __init__(self, name):
-        self.name = name
+    if parser_name == 'Pandas':
+        return PandasParser()
     
-    def create_parser(self):
-        """ Get a parser for preparing and transforming a report """
-        parser_name = self.parser_name
-        
-        self.logger.info(parser_name)
-        if parser_name == 'Pandas':
-            return PandasParser()
-        
-        else:
-            raise ValueError("A parser, " + parser_name + ", wasn't set up to run in this system.")
+    else:
+        raise ValueError("A parser, " + parser_name + ", wasn't set up to run in this system.")
             

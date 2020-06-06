@@ -6,9 +6,9 @@ from models.log import LogModel
 from services.log import create_logger
 from services.filesystem import FileSystem
 
-from components.sources import Source
-from components.parsers import Parser
-from components.stores import Store
+from components.sources import get_source
+from components.parsers import get_parser
+from components.stores import get_store
 
 from typing import List
 from concurrent.futures import ThreadPoolExecutor
@@ -70,9 +70,9 @@ class FlowModel(Base):
     def run(self):
         self.logger = create_logger(self.id)
         self.fs = FileSystem()
-        self.source = Source(self.source.name).create_source()
-        self.parser = Parser(self.parser_name).create_parser()
-        self.store = Store(self.store_name).create_store()
+        self.source = get_source(self.source.name)
+        self.parser = get_parser(self.parser_name)
+        self.store = get_store(self.store_name)
     
         file_list = self.discover(self.report)
         processed_logs = self.get_all_logs_by_status("Success")
