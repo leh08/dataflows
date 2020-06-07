@@ -2,7 +2,7 @@ from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
-from flask_uploads import configure_uploads, patch_request_class
+#from flask_uploads import configure_uploads, patch_request_class
 
 from marshmallow import ValidationError
 from dotenv import load_dotenv
@@ -16,10 +16,10 @@ from resources.log import LogList, Log
 from resources.source import SourceList, Source
 from resources.authorization import AuthorizationList, Authorization
 from resources.flow import FlowList, Flow
-from resources.file import Upload
+#from resources.file import Upload
 from resources.google import GoogleLogin, GoogleAuthorize
 
-from services.uploads import UPLOAD_SET
+#from services.uploads import UPLOAD_SET
 
 app = Flask(__name__)
 # Default config
@@ -29,8 +29,8 @@ app.config.from_envvar("APPLICATION_SETTINGS")
 api = Api(app)
 jwt = JWTManager(app)
 CORS(app)
-patch_request_class(app, 10 * 1024 * 1024 * 1024) # 10GB max size upload
-configure_uploads(app, UPLOAD_SET)
+#patch_request_class(app, 10 * 1024 * 1024 * 1024) # 10GB max size upload
+#configure_uploads(app, UPLOAD_SET)
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
@@ -61,7 +61,7 @@ api.add_resource(Logout, "/logout")
 api.add_resource(CurrentUser, "/user")
 api.add_resource(Resend, "/resend")
 api.add_resource(Confirmation, "/confirmation/<string:confirmation_id>")
-api.add_resource(Upload, "/upload/<string:flow_name>")
+#api.add_resource(Upload, "/upload/<string:flow_name>")
 api.add_resource(GoogleLogin, "/google/login")
 api.add_resource(GoogleAuthorize, "/google/login/authorized")
 
