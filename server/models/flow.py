@@ -206,8 +206,8 @@ class FlowModel(Base):
                
         for file_id, is_success in results.items():
             if is_success:
-                logger = create_logger(self.id, status="Success")
+                logger = create_logger(self, status="Success")
                 logger.info(file_id)
             else:
-                logger = create_logger(self.id, status="Failure")
+                logger = create_logger(self, status="Failure")
                 logger.info(file_id)
