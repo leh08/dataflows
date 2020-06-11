@@ -1,4 +1,5 @@
 from schema import BaseSchema
+from marshmallow.fields import Nested
 from models.authorization import AuthorizationModel
 
 

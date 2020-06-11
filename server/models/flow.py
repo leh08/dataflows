@@ -68,7 +68,7 @@ class FlowModel(Base):
         db_session.commit()
 
     def run(self):
-        self.logger = create_logger(self.id)
+        self.logger = create_logger(self)
         self.fs = FileSystem()
         self.source = get_source(self.source.name)
         self.parser = get_parser(self.parser_name)
