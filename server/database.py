@@ -21,8 +21,8 @@ def init_db():
     # you will have to import them first before calling init_db()
     from models.source import SourceModel
     from models.authorization import AuthorizationModel
-    from models.flow import FlowModel
     from models.log import LogModel
+    from models.flow import FlowModel
     from models.user import UserModel
     from models.confirmation import ConfirmationModel
 
@@ -31,8 +31,8 @@ def init_db():
 def restart_db():
     from models.source import SourceModel
     from models.authorization import AuthorizationModel
-    from models.flow import FlowModel
     from models.log import LogModel
+    from models.flow import FlowModel
     from models.user import UserModel
     from models.confirmation import ConfirmationModel
     
