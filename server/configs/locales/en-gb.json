@@ -20,6 +20,7 @@
 
     "flow_name_exists": "A flow with name '{}' already exists.",
     "flow_error_inserting": "An error occurred while inserting the flow.",
+    "flow_error_creating": "An error occurred while creating the flow.",
     "flow_not_found": "Flow not found.",
     "flow_deleted": "Flow deleted.",
 

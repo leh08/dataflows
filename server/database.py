@@ -41,14 +41,13 @@ def restart_db():
     
     # Create the fixtures
     s3 = SourceModel(name='S3')
-    db_session.add(s3)
+    s3.save_to_db()
     google = SourceModel(name='Google')
-    db_session.add(google)
+    google.save_to_db()
     database = SourceModel(name='Database')
-    db_session.add(database)
+    database.save_to_db()
     file = SourceModel(name='File')
-    db_session.add(file)
-    db_session.commit()
+    file.save_to_db()
     
     default_credential = AuthorizationModel(
         name='PHD Media',
@@ -58,5 +57,11 @@ def restart_db():
         },
         source = s3
     )
-    db_session.add(default_credential) 
-    db_session.commit()
+    default_credential.save_to_db()
+    
+    admin = UserModel(email="admin", password="123456")
+    admin.save_to_db()
+    new_confirmation = ConfirmationModel(user_id=admin.id)
+    new_confirmation.save_to_db()
+    new_confirmation.confirmed = True
+    new_confirmation.save_to_db()

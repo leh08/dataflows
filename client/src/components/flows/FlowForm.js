@@ -33,6 +33,18 @@ class FlowForm extends React.Component {
             <form onSubmit={this.props.handleSubmit(this.onSubmit)} className="ui form error">
                 <Field name="name" component={this.renderInput} label="Enter Name" />
                 <Field name="report" component={this.renderInput} label="Enter Report" />
+                <Field name="profile" component={this.renderInput} label="Enter Profile" />
+                <Field name="parser_name" component={this.renderInput} label="Enter Parser" />
+                <Field name="store_name" component={this.renderInput} label="Enter Store" />
+                <Field name="is_model" component={this.renderInput} label="Enter Model" />
+                <Field name="schema" component={this.renderInput} label="Enter Schema" />
+                <Field name="load_mode" component={this.renderInput} label="Enter Load Mode" />
+                <Field name="frequency" component={this.renderInput} label="Enter Frequency" />
+                <Field name="day_unit" component={this.renderInput} label="Enter Day" />
+                <Field name="time_unit" component={this.renderInput} label="Enter Time" />
+                <Field name="sql_script" component={this.renderInput} label="Enter SQL URI" />
+                <Field name="source_id" component={this.renderInput} label="Enter Source" />
+                <Field name="authorization_id" component={this.renderInput} label="Enter Authorization" />
                 <button className="ui button primary">Submit</button>
             </form>
         );

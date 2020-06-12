@@ -2,6 +2,8 @@ from flask_restful import Resource
 from flask import request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from models.flow import FlowModel
+from models.user import UserModel
+
 from schemas.flow import FlowSchema
 from services.locales import gettext
 
@@ -15,14 +17,17 @@ class FlowList(Resource):
         return {"flows": flow_list_schema.dump(FlowModel.find_all())}, 200
     
     @classmethod
-    @jwt_required
+    # @jwt_required
     def post(cls):
-        user_id = get_jwt_identity()
+        # user_id = get_jwt_identity()
+        # user = UserModel.find_by_id(user_id)
+        
+        # if not user:
+        #     return {"message": gettext("flow_error_creating")}, 404
+        
         flow_json = request.get_json()
-        flow_json["user_id"] = user_id
-
         flow = flow_schema.load(flow_json)
-            
+        
         name = flow.name
         
         if FlowModel.find_by_name(name):
