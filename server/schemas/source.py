@@ -7,4 +7,4 @@ class SourceSchema(BaseSchema):
     class Meta(BaseSchema.Meta):
         model = SourceModel
         
-    authorizations = Nested(AuthorizationSchema, many=True)
+    authorizations = Nested(AuthorizationSchema, exclude=['source_id'], many=True)
