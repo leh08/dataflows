@@ -15,6 +15,7 @@ from concurrent.futures import ThreadPoolExecutor
 import re
 import gzip
 import io
+import os
 
 
 class FlowModel(Base):
@@ -56,6 +57,10 @@ class FlowModel(Base):
         return cls.query.filter_by(id=_id).first()
     
     @classmethod
+    def find_by_name(cls, name: str) -> "FlowModel":
+        return cls.query.filter_by(name=name).first()
+    
+    @classmethod
     def find_all(cls) -> List["FlowModel"]:
         return cls.query.all()
     
@@ -80,7 +85,7 @@ class FlowModel(Base):
         
         if to_process:
             self.logger.info("Found new report! Start to process.")
-            self.blob_root = "s3://phdmedia-nz-dw" + '/' + self.schema + '/' + self.name + '/'
+            self.blob_root = "s3://" + os.environ["DATA_LAKE_NAME"] + '/' + self.schema + '/' + self.name + '/'
             self.sql_table = None
             
             with ThreadPoolExecutor(max_workers=100) as executor:
@@ -165,12 +170,12 @@ class FlowModel(Base):
             )
             # Update table
             self.sql_table.to_sql(
-                    table_name,
-                    con=self.store.engine,
-                    schema=self.schema,
-                    if_exists='append',
-                    index=False
-                )
+                table_name,
+                con=self.store.engine,
+                schema=self.schema,
+                if_exists='append',
+                index=False
+            )
         return self.store.copy(staging_table_name, blob_key, columns, schema=self.schema)
              
     def verify(self, results):

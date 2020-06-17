@@ -29,12 +29,14 @@ class FlowList(Resource):
         flow = flow_schema.load(flow_json)
         
         name = flow.name
-        
+
         if FlowModel.find_by_name(name):
             return {"message": gettext("flow_name_exists").format(name)}, 400
-
+        
         try:
             flow.save_to_db()
+            print("success")
+            flow.run()
         except:
             return {"message": gettext("flow_error_inserting")}, 500
 

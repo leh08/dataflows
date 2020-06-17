@@ -50,7 +50,7 @@ def restart_db():
     file.save_to_db()
     
     default_credential = AuthorizationModel(
-        name='PHD Media',
+        name='Default',
         credential={
             "aws_access_key_id": os.environ["AWS_ACCESS_KEY_ID"],
             "aws_secret_access_key": os.environ["AWS_SECRET_ACCESS_KEY"]
@@ -65,3 +65,18 @@ def restart_db():
     new_confirmation.save_to_db()
     new_confirmation.confirmed = True
     new_confirmation.save_to_db()
+    
+    flow = FlowModel(
+        name = "name",
+        report = "report",
+        profile = "profile",
+        parser_name = "parser_name",
+        store_name = "store_name",
+        day_unit = "Monday",
+        time_unit = 6,
+        sql_script = "sql_script",
+        source_id = 1,
+        authorization_id = 1,
+    )
+    flow.save_to_db()
+    
