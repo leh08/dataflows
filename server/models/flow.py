@@ -37,8 +37,7 @@ class FlowModel(Base):
     status = Column(String, default='Active')
     created_on = Column(DateTime, default=func.now())
 
-    source_id = Column(Integer, ForeignKey('sources.id'))
-    source = relationship('SourceModel')
+    source_name = Column(String, ForeignKey('sources.name'))
     
     authorization_id = Column(Integer, ForeignKey('authorizations.id'))
     authorization = relationship('AuthorizationModel')

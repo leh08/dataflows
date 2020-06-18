@@ -35,7 +35,6 @@ class FlowList(Resource):
         
         try:
             flow.save_to_db()
-            print("success")
             flow.run()
         except:
             return {"message": gettext("flow_error_inserting")}, 500

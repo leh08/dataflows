@@ -75,7 +75,7 @@ def restart_db():
         day_unit = "Monday",
         time_unit = 6,
         sql_script = "sql_script",
-        source_id = 1,
+        source_name = "S3",
         authorization_id = 1,
     )
     flow.save_to_db()
