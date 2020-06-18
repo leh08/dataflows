@@ -6,6 +6,7 @@ from models.user import UserModel
 
 from schemas.flow import FlowSchema
 from services.locales import gettext
+from services.flows import create_flow
 
 flow_schema = FlowSchema()
 flow_list_schema = FlowSchema(many=True)
@@ -35,7 +36,9 @@ class FlowList(Resource):
         
         try:
             flow.save_to_db()
+            flow = create_flow(flow.__dict__)
             flow.run()
+            
         except:
             return {"message": gettext("flow_error_inserting")}, 500
 

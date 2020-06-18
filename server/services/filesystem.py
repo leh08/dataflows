@@ -9,7 +9,7 @@ class FileSystem:
         self,
         name: str = "S3",
         credential: Dict = None,
-        authorization_name: str = "PHD.DataFlow"
+        authorization_name: str = "Default"
     ):
         self.name = name
         source = SourceModel.find_by_name(name)

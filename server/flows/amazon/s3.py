@@ -1,6 +1,6 @@
-from models.flow import FlowModel
+from flows.flow import Flow
 
-class S3(FlowModel):
+class S3(Flow):
     
     def discover(self, report):
         return self.source.client.ls(report)

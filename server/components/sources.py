@@ -1,9 +1,7 @@
 from services.filesystem import FileSystem
    
-def get_source(name):
+def get_source(source_name, credential):
     """ Get a source API for retrieve a report """
-    source_name = name
-    credential = authorization.credential
 
     if source_name == "S3":
         return FileSystem(credential=credential)
