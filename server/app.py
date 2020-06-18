@@ -12,9 +12,9 @@ from blacklist import BLACKLIST
 
 from resources.user import User, Signup, Login, Logout, TokenRefresh, CurrentUser, Resend
 from resources.confirmation import Confirmation
-from resources.log import LogList, Log
 from resources.source import SourceList, Source
 from resources.authorization import AuthorizationList, Authorization
+from resources.log import LogList, Log
 from resources.flow import FlowList, Flow
 #from resources.file import Upload
 from resources.google import GoogleLogin, GoogleAuthorize

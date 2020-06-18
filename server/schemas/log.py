@@ -1,5 +1,4 @@
 from schema import BaseSchema
-from models.flow import FlowModel
 from models.log import LogModel
 
 

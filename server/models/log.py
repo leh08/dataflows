@@ -1,23 +1,25 @@
 from typing import List
 from database import Base, db_session
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, DateTime, Integer, String, func, ForeignKey
 
 
 class LogModel(Base):
     __tablename__ = "logs"
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(80), nullable=False)
-
+    message = Column(String(80), nullable=False)
+    date = Column(DateTime, default=func.now()) # the current timestamp
+    status = Column(String)
+    
     flow_id = Column(Integer, ForeignKey("flows.id"), nullable=False)
 
     @classmethod
-    def find_by_name(cls, name: str) -> "LogModel":
-        return cls.query.filter_by(name=name).first()
-
+    def find_by_file(cls, file: str) -> "LogModel":
+        return cls.query.filter_by(file=file).first()
+    
     @classmethod
-    def find_all(cls) -> List["LogModel"]:
-        return cls.query.all()
+    def find_all(cls, status) -> List["LogModel"]:
+        return cls.query.filter_by(status=status).all()
 
     def save_to_db(self) -> None:
         db_session.add(self)
