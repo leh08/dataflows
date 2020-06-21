@@ -110,8 +110,6 @@ class Flow:
         pass
      
     def load(self, df, blob_key):
-        # When you develope real data warehouse architect with ORM, look into
-        # how to combine Pandas and SQLAlchemy.
         blob_key = blob_key + '.gz'
         bytes_buffer = io.BytesIO()
         with gzip.open(bytes_buffer, 'wb') as file:
