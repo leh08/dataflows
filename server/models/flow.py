@@ -1,21 +1,9 @@
 from typing import List
-import os
-import io
-import re
-import gzip
-from concurrent.futures import ThreadPoolExecutor
 
 from database import Base, db_session
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Boolean, func
 from sqlalchemy.orm import relationship
 from models.log import LogModel
-
-from services.log import create_logger
-from services.filesystem import FileSystem
-
-from components.sources import get_source
-from components.parsers import get_parser
-from components.stores import get_store
 
 
 class FlowModel(Base):
@@ -47,9 +35,6 @@ class FlowModel(Base):
     @property
     def most_recent_log(self) -> "LogModel":
         return self.logs.order_by(LogModel.date.desc()).first()
-    
-    def get_all_logs_by_status(self, status):
-        self.logs.filter_by(status=status).all()
         
     @classmethod
     def find_by_id(cls, _id: str) -> "FlowModel":

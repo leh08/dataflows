@@ -1,3 +1,9 @@
+import os
+import io
+import re
+import gzip
+from concurrent.futures import ThreadPoolExecutor
+
 from services.log import create_logger
 from services.filesystem import FileSystem
 
@@ -8,23 +14,13 @@ from components.stores import get_store
 
 class Flow:
     def __init__(
-        self, name,
-        report,
-        profile,
-        parser_name,
-        store_name,
-        is_model,
-        schema,
-        load_mode,
-        frequency,
-        day_unit,
-        time_unit,
-        sql_script,
-        source_name,
-        logs,
-        authorization,
+        self, name, report, profile,
+        parser_name, store_name, is_model, schema,
+        load_mode, frequency, day_unit, time_unit,
+        sql_script, source_name, authorization, logs,
         **kwargs
-    ):
+    ):  
+        print(name)
         self.name = name
         self.report = report
         self.source_name = source_name
@@ -39,17 +35,25 @@ class Flow:
         self.logs = logs
         
         self.logger = create_logger(self)
+        print('Pass logger')
         self.fs = FileSystem()
-        self.source = get_source(source_name, getattr(authorization, 'credential'))
+        print('Pass fs')
+        self.source = get_source(source_name, authorization.get('credential'))
+        print('Pass source')
         self.parser = get_parser(parser_name)
+        print('Pass parser')
         self.store = get_store(store_name)
+        print('Pass store')
         
     def run(self):
         file_list = self.discover(self.report)
+        print('Pass', file_list)
         print(file_list)
-        processed_logs = self.get_all_logs_by_status("Success")
+        processed_logs = [log for log in logs if log.get('status') == 'Success']
+        print('Pass', processed_logs)
+        print(processed_logs)
         to_process = [file_id for file_id in file_list if file_id not in processed_logs]
-        
+    
         if to_process:
             self.logger.info("Found new report! Start to process.")
             self.blob_root = "s3://" + os.environ["DATA_LAKE_NAME"] + '/' + self.schema + '/' + self.name + '/'

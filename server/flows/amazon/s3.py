@@ -1,9 +1,7 @@
 from flows.flow import Flow
 
 class S3(Flow):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        
+
     def discover(self, report):
         return self.source.client.ls(report)
     

@@ -9,5 +9,5 @@ class FlowSchema(BaseSchema):
     class Meta(BaseSchema.Meta):
         model = FlowModel
 
-    authorization = Nested(AuthorizationSchema, exclude=['source_id', 'created_at'])
+    authorization = Nested(AuthorizationSchema)
     logs = Nested(LogSchema, many=True)
