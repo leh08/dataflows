@@ -14,18 +14,19 @@ class Redshift:
             schema = '"{}"'.format(schema)
             table = '"{}"'.format(table_name)
             columns = ', '.join('"{}"'.format(column) for column in columns)
-
+            IAM_ROLE = os.environ["REDSHIFT_IAM_ROLE"]
+            
             query = '''
                 COPY {}.{} ({})
                 FROM '{}'
-                IAM_ROLE 'arn:aws:iam::142255444761:role/Redshift'
+                IAM_ROLE '{}'
                 REMOVEQUOTES
                 DELIMITER '\t'
                 GZIP
                 IGNOREHEADER 1
                 MAXERROR 20;
-            '''.format(schema, table, columns, blob_key)
-            
+            '''.format(schema, table, columns, blob_key, IAM_ROLE)
+     
             with self.engine.connect() as con:
                 con.execute(text(query).execution_options(autocommit=True))
                 

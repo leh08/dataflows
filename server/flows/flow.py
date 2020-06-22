@@ -20,7 +20,6 @@ class Flow:
         sql_script, source_name, authorization, logs,
         **kwargs
     ):  
-        print(name)
         self.name = name
         self.report = report
         self.source_name = source_name
@@ -34,25 +33,16 @@ class Flow:
         self.sql_script = sql_script
         self.logs = logs
         
-        self.logger = create_logger(self)
-        print('Pass logger')
+        self.logger = create_logger(name)
         self.fs = FileSystem()
-        print('Pass fs')
         self.source = get_source(source_name, authorization.get('credential'))
-        print('Pass source')
         self.parser = get_parser(parser_name)
-        print('Pass parser')
         self.store = get_store(store_name)
-        print('Pass store')
-        
+
     def run(self):
         file_list = self.discover(self.report)
-        print('Pass', file_list)
-        print(file_list)
-        processed_logs = [log for log in logs if log.get('status') == 'Success']
-        print('Pass', processed_logs)
-        print(processed_logs)
-        to_process = [file_id for file_id in file_list if file_id not in processed_logs]
+        processed_files = [log['file'] for log in self.logs if log.get('status') == 'Success']
+        to_process = [file_id for file_id in file_list if file_id not in processed_files]
     
         if to_process:
             self.logger.info("Found new report! Start to process.")
@@ -85,7 +75,7 @@ class Flow:
             
         self.fs.cloud_upload(stream, blob_key)
         logger.info("File {} has been copied to {}.".format(file_id, blob_key))
-        
+
         df = self.transform(stream, extension)
         logger.info("File {} succeed to transform.".format(blob_key))
         
@@ -120,7 +110,7 @@ class Flow:
             file.write(df.to_csv(sep="\t", index=False).encode())
             
         self.fs.cloud_upload(bytes_buffer.getvalue(), blob_key)
-        
+ 
         # Create empty table
         table_name = self.name.lower()
         staging_table_name = table_name + '_' + 'staging'
@@ -179,9 +169,10 @@ class Flow:
             raise
                
         for file_id, is_success in results.items():
+            self.logger.extra['file'] = file_id
             if is_success:
-                logger = create_logger(self, status="Success")
-                logger.info(file_id)
+                self.logger.extra['status'] = "Success"
+                self.logger.info("File {} succeed to insert into a table".format(file_id))
             else:
-                logger = create_logger(self, status="Failure")
-                logger.info(file_id)
+                self.logger.extra['status'] = "Failure"
+                self.logger.info("File {} fail to insert into a table".format(file_id))

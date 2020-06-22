@@ -38,7 +38,6 @@ class FlowList(Resource):
             flow.save_to_db()
             flow_dict = flow_schema.dump(flow)
             flow = create_flow(flow_dict)
-            print("Start flow")
             flow.run()
             
         except:

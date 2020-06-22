@@ -7,9 +7,10 @@ class LogModel(Base):
     __tablename__ = "logs"
 
     id = Column(Integer, primary_key=True)
-    message = Column(String(80), nullable=False)
+    message = Column(String, nullable=False)
     date = Column(DateTime, default=func.now()) # the current timestamp
     status = Column(String)
+    file = Column(String)
     
     flow_id = Column(Integer, ForeignKey("flows.id"), nullable=False)
     

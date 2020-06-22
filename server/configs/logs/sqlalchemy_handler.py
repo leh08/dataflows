@@ -13,6 +13,7 @@ class SQLAlchemyHandler(logging.Handler):
         log = LogModel(
             message=record.msg or trace,
             status=record.status,
+            file=record.file,
             flow_id=record.flow_id,
         )
         log.save_to_db()
