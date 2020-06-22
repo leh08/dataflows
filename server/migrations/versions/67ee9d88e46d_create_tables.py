@@ -1,8 +1,8 @@
-"""First Revision
+"""Create tables
 
-Revision ID: 9c1e73838425
+Revision ID: 67ee9d88e46d
 Revises: 
-Create Date: 2020-06-02 09:03:41.273584
+Create Date: 2020-06-22 16:46:02.568652
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '9c1e73838425'
+revision = '67ee9d88e46d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -21,7 +21,8 @@ def upgrade():
     op.create_table('sources',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=True),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('name')
     )
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -49,16 +50,33 @@ def upgrade():
     )
     op.create_table('flows',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(length=80), nullable=False),
-    sa.Column('report', sa.String(length=80), nullable=True),
-    sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.Column('name', sa.String(), nullable=False),
+    sa.Column('report', sa.String(), nullable=False),
+    sa.Column('profile', sa.String(), nullable=True),
+    sa.Column('parser_name', sa.String(), nullable=True),
+    sa.Column('store_name', sa.String(), nullable=True),
+    sa.Column('is_model', sa.Boolean(), nullable=True),
+    sa.Column('schema', sa.String(), nullable=True),
+    sa.Column('load_mode', sa.String(), nullable=True),
+    sa.Column('frequency', sa.String(), nullable=True),
+    sa.Column('day_unit', sa.String(), nullable=True),
+    sa.Column('time_unit', sa.Integer(), nullable=True),
+    sa.Column('sql_script', sa.String(), nullable=True),
+    sa.Column('status', sa.String(), nullable=True),
+    sa.Column('created_on', sa.DateTime(), nullable=True),
+    sa.Column('source_name', sa.String(), nullable=True),
+    sa.Column('authorization_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['authorization_id'], ['authorizations.id'], ),
+    sa.ForeignKeyConstraint(['source_name'], ['sources.name'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
     op.create_table('logs',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(length=80), nullable=False),
+    sa.Column('message', sa.String(), nullable=False),
+    sa.Column('date', sa.DateTime(), nullable=True),
+    sa.Column('status', sa.String(), nullable=True),
+    sa.Column('file', sa.String(), nullable=True),
     sa.Column('flow_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['flow_id'], ['flows.id'], ),
     sa.PrimaryKeyConstraint('id')
