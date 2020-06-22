@@ -36,13 +36,13 @@ class FlowList(Resource):
         
         try:
             flow.save_to_db()
-            flow_dict = flow_schema.dump(flow)
-            flow = create_flow(flow_dict)
-            flow.run()
+            flow_dict = flow.as_dict()
+            flow_instance = create_flow(flow_dict)
+            flow_instance.run()
             
         except:
             return {"message": gettext("flow_error_inserting")}, 500
-
+        
         return flow_schema.dump(flow), 201
     
 

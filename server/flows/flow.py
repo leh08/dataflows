@@ -43,7 +43,7 @@ class Flow:
         file_list = self.discover(self.report)
         processed_files = [log['file'] for log in self.logs if log.get('status') == 'Success']
         to_process = [file_id for file_id in file_list if file_id not in processed_files]
-    
+
         if to_process:
             self.logger.info("Found new report! Start to process.")
             self.blob_root = "s3://" + os.environ["DATA_LAKE_NAME"] + '/' + self.schema + '/' + self.name + '/'
@@ -85,7 +85,7 @@ class Flow:
             
         else:
             blob_key = self.blob_root + 'data' + '/' + file_name
-
+    
         return {file_id: self.load(df, blob_key)}
      
     def discover(self):
@@ -115,7 +115,7 @@ class Flow:
         table_name = self.name.lower()
         staging_table_name = table_name + '_' + 'staging'
         columns = df.columns
-        
+
         if self.sql_table is None:
             # Obtain SQL table object
             self.sql_table = df[:0]

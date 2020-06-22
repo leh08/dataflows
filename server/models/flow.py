@@ -32,6 +32,9 @@ class FlowModel(Base):
     
     logs = relationship('LogModel', lazy='dynamic', cascade='delete,all')
     
+    def as_dict(self):
+       return {column.name: getattr(self, column.name) for column in self.__table__.columns}
+    
     @property
     def most_recent_log(self) -> "LogModel":
         return self.logs.order_by(LogModel.date.desc()).first()

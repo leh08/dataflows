@@ -17,6 +17,9 @@ class AuthorizationModel(Base):
     source_id = Column(Integer, ForeignKey('sources.id'))
     source = relationship("SourceModel")
     
+    def as_dict(self):
+       return {column.name: getattr(self, column.name) for column in self.__table__.columns}
+    
     @classmethod
     def find_by_id(cls, _id: int) -> "AuthorizationModel":
         return cls.query.filter_by(id=_id).first()
