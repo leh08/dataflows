@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
@@ -21,7 +21,7 @@ from resources.google import GoogleLogin, GoogleAuthorize
 
 #from services.uploads import UPLOAD_SET
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../client/build')
 # Default config
 app.config.from_pyfile("default_config.py")
 # Update new parameters in config
@@ -44,6 +44,10 @@ def handle_marshmallow_validation(err):
 @jwt.token_in_blacklist_loader
 def check_if_token_in_blacklist(decrypted_token):
     return (decrypted_token["jti"] in BLACKLIST)  # Here we blacklist particular JWTs that have been created in the past.
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 api.add_resource(SourceList, "/sources")
 api.add_resource(Source, "/sources/<int:source_id>")
