@@ -21,7 +21,7 @@ from resources.google import GoogleLogin, GoogleAuthorize
 
 #from services.uploads import UPLOAD_SET
 
-app = Flask(__name__, static_folder='../client/build')
+app = Flask(__name__, static_folder='../client/build/static', template_folder="../client/build")
 # Default config
 app.config.from_pyfile("default_config.py")
 # Update new parameters in config
