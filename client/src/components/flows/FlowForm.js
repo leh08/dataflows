@@ -40,8 +40,8 @@ class FlowForm extends React.Component {
                 <Field name="schema" component={this.renderInput} label="Enter Schema" />
                 <Field name="load_mode" component={this.renderInput} label="Enter Load Mode" />
                 <Field name="frequency" component={this.renderInput} label="Enter Frequency" />
-                <Field name="day_unit" component={this.renderInput} label="Enter Day" />
-                <Field name="time_unit" component={this.renderInput} label="Enter Time" />
+                <Field name="hour" component={this.renderInput} label="Enter Hour" />
+                <Field name="day" component={this.renderInput} label="Enter Day" />
                 <Field name="sql_script" component={this.renderInput} label="Enter SQL URI" />
                 <Field name="source_id" component={this.renderInput} label="Enter Source" />
                 <Field name="authorization_id" component={this.renderInput} label="Enter Authorization" />
