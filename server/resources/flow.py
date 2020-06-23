@@ -43,8 +43,11 @@ class FlowList(Resource):
             if flow.frequency:
                 schedule(flow_instance.run, frequency=flow.frequency, hour=flow.hour, day=flow.day, job_id=flow.id)
             
-        except:
-            return {"message": gettext("flow_error_inserting")}, 500
+        except Exception as error:
+            return {
+                "message": gettext("flow_error_inserting"),
+                "error": str(error)
+            }, 500
         
         return flow_schema.dump(flow), 201
     
