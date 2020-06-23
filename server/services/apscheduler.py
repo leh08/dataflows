@@ -1,9 +1,9 @@
-from pytz import utc
+import pytz
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from configurations.schedulers.apscheduler import jobstores, executors, job_defaults
 
-scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone=utc)
+scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone=pytz.timezone("Pacific/Auckland"))
 
 def schedule(function, frequency: str = "Daily", hour: int = 6, day: str = None, job_id: int = None):    
     if frequency == 'Hourly':
