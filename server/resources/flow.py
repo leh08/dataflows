@@ -7,6 +7,7 @@ from models.user import UserModel
 from schemas.flow import FlowSchema
 from services.locales import gettext
 from services.flows import create_flow
+from services.apscheduler import schedule
 
 flow_schema = FlowSchema()
 flow_list_schema = FlowSchema(many=True)
@@ -39,6 +40,8 @@ class FlowList(Resource):
             flow_dict = flow.as_dict()
             flow_instance = create_flow(flow_dict)
             flow_instance.run()
+            if flow.frequency:
+                schedule(flow_instance.run, frequency=flow.frequency, hour=flow.hour, day=flow.day, job_id=flow.id)
             
         except:
             return {"message": gettext("flow_error_inserting")}, 500

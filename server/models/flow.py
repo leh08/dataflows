@@ -18,9 +18,9 @@ class FlowModel(Base):
     is_model = Column(Boolean, default=False)
     schema = Column(String, default='public')
     load_mode = Column(String, default='Replace') # Load mode: Append, Replace, Upsert
-    frequency = Column(String, default='Daily') # Frequency: Daily, Weekly, Minutes, Hours, Days, Weeks
-    day_unit = Column(String)
-    time_unit = Column(Integer)
+    frequency = Column(String) # Frequency: Daily, Weekly, Hours, Days, Weeks
+    hour = Column(Integer)
+    day = Column(String)
     sql_script = Column(String)
     status = Column(String, default='Active')
     created_on = Column(DateTime, default=func.now())
