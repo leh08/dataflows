@@ -20,6 +20,7 @@ from resources.flow import FlowList, Flow
 from resources.google import GoogleLogin, GoogleAuthorize
 
 #from services.uploads import UPLOAD_SET
+from services.apscheduler import scheduler
 
 app = Flask(__name__, static_folder='../client/build/static', template_folder="../client/build")
 # Default config
@@ -74,5 +75,6 @@ if __name__ == "__main__":
         restart_db()
     else:
         init_db()
-
+    scheduler.start()
     app.run(port=5000)
+    

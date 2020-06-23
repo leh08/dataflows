@@ -16,30 +16,33 @@ class Flow:
     def __init__(
         self, name, report, profile,
         parser_name, store_name, is_model, schema,
-        load_mode, frequency, day_unit, time_unit,
+        load_mode, frequency, hour, day,
         sql_script, source_name, authorization, logs,
         **kwargs
     ):  
         self.name = name
         self.report = report
         self.source_name = source_name
+        self.authorization = authorization
         self.profile = profile
+        self.parser_name = parser_name
         self.is_model = is_model
+        self.store_name = store_name
         self.schema = schema
         self.load_mode = load_mode
         self.frequency = frequency
-        self.day_unit = day_unit
-        self.time_unit = time_unit
+        self.hour = hour
+        self.day = day
         self.sql_script = sql_script
         self.logs = logs
-        
-        self.logger = create_logger(name)
-        self.fs = FileSystem()
-        self.source = get_source(source_name, authorization.get('credential'))
-        self.parser = get_parser(parser_name)
-        self.store = get_store(store_name)
 
     def run(self):
+        self.logger = create_logger(self.name)
+        self.fs = FileSystem()
+        self.source = get_source(self.source_name, self.authorization.get('credential'))
+        self.parser = get_parser(self.parser_name)
+        self.store = get_store(self.store_name)
+        
         file_list = self.discover(self.report)
         processed_files = [log['file'] for log in self.logs if log.get('status') == 'Success']
         to_process = [file_id for file_id in file_list if file_id not in processed_files]

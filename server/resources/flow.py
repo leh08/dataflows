@@ -39,9 +39,11 @@ class FlowList(Resource):
             flow.save_to_db()
             flow_dict = flow.as_dict()
             flow_instance = create_flow(flow_dict)
-            flow_instance.run()
+
             if flow.frequency:
                 schedule(flow_instance.run, frequency=flow.frequency, hour=flow.hour, day=flow.day, job_id=flow.id)
+                
+            flow_instance.run()
             
         except Exception as error:
             return {
