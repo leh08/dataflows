@@ -4,7 +4,7 @@ from requests_oauthlib import OAuth2Session
 
 from models.source import SourceModel
 from models.authorization import AuthorizationModel
-from configs.auths.oauth import oauth_configs
+from configurations.auths.oauth import oauth_configs
 
 
 class OAuth:

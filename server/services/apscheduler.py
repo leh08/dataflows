@@ -1,4 +1,10 @@
+from pytz import utc
 from datetime import datetime, date, time, timedelta
+
+from apscheduler.schedulers.background import BackgroundScheduler
+from configurations.schedulers.apscheduler import jobstores, executors, job_defaults
+
+scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone=utc)
 
 def schedule(self):
     params = dict()
