@@ -1,5 +1,10 @@
 import React from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
+
+import "normalize.css";
+import "@blueprintjs/core/lib/css/blueprint.css";
+import "@blueprintjs/icons/lib/css/blueprint-icons.css";
+
 import Home from './Home';
 import FlowCreate from './flows/FlowCreate';
 import FlowEdit from './flows/FlowEdit';
