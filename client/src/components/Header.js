@@ -29,22 +29,20 @@ class Header extends React.Component {
 
     render() {
         return (
-            <nav class="bp3-navbar">
-                <div style={{margin: '0 auto'}}>
-                    <div class="bp3-navbar-group bp3-align-left">
-                        <Link to="/" className="bp3-button bp3-minimal bp3-navbar-heading">
-                            Data Warehouse
-                        </Link>
-                        <span class="bp3-navbar-divider"></span>
-                        <Link to="/flows" className="bp3-button bp3-minimal bp3-navbar-heading">
-                            Flow
-                        </Link>
-                    </div>
-                    <div class="bp3-navbar-group bp3-align-right">
-                        {this.renderAuth()}
-                    </div>
+            <div class="bp3-navbar">
+                <div class="bp3-navbar-group bp3-align-left">
+                    <Link to="/" className="bp3-button bp3-minimal bp3-navbar-heading">
+                        Data Warehouse
+                    </Link>
+                    <div class="bp3-navbar-divider"/>
+                    <Link to="/flows" className="bp3-button bp3-minimal bp3-navbar-heading">
+                        Flow
+                    </Link>
                 </div>
-            </nav>
+                <div class="bp3-navbar-group bp3-align-right">
+                    {this.renderAuth()}
+                </div>
+            </div>
         );
     }
 }
