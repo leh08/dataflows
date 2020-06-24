@@ -4,6 +4,7 @@ Alembic
 Marshmallow
 Marshmallow-SQLAlchemy
 Flask
+Flask-CORS
 Flask-RESTful
 Flask-JWT-Extended
 Flask-Uploads
