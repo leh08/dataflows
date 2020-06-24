@@ -2,10 +2,6 @@ heroku login
 
 cd $APP_NAME
 
-git init
-git add .
-git commit -m "wip"
-
 heroku apps:create $APP_NAME-server
 heroku addons:create heroku-postgresql --app $APP_NAME-server
 heroku apps:create $APP_NAME-client --buildpack mars/create-react-app
