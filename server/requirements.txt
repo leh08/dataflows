@@ -1,4 +1,4 @@
-python-dotenv
+Python-Dotenv
 SQLAlchemy
 Alembic
 Marshmallow
@@ -14,7 +14,7 @@ APScheduler
 Psycopg2
 uWSGI
 S3FS
-Scikit-learn
+Scikit-Learn
 Pandas
 Pytz
 SQLAlchemy-Redshift
