@@ -3,8 +3,10 @@ import os
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 
+DATABASE_URL = os.getenv('DATABASE_URL') or os.environ["SQLALCHEMY_DATABASE_URI"]
+
 jobstores = {
-    'default': SQLAlchemyJobStore(url=os.environ["SQLALCHEMY_DATABASE_URI"])
+    'default': SQLAlchemyJobStore(url=DATABASE_URL)
 }
 executors = {
     'default': ThreadPoolExecutor(20),
