@@ -24,7 +24,7 @@ from services.apscheduler import scheduler
 
 app = Flask(__name__)
 # Default config
-app.config.from_pyfile("default_config.py")
+app.config.from_pyfile("configurations/app/default_config.py")
 # Update new parameters in config
 app.config.from_envvar("APPLICATION_SETTINGS")
 api = Api(app)
