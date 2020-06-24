@@ -76,6 +76,5 @@ api.add_resource(GoogleLogin, "/google/login")
 api.add_resource(GoogleAuthorize, "/google/login/authorized")
 
 if __name__ == "__main__":
-    init_server()
     app.run(port=5000)
     
