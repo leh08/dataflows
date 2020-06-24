@@ -73,5 +73,5 @@ if __name__ == "__main__":
         init_db()
         
     scheduler.start()
-    app.run(port=5000, debug=True)
+    app.run(port=5000)
     
