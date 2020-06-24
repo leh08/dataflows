@@ -33,6 +33,19 @@ CORS(app)
 patch_request_class(app, 10 * 1024 * 1024 * 1024) # 10GB max size upload
 configure_uploads(app, UPLOAD_SET)
 
+@app.route('/')
+def home():
+    return 'Home'
+
+@app.before_first_request
+def init_server():
+    if app.debug:
+        restart_db()
+    else:
+        init_db()
+        
+    scheduler.start()
+    
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
@@ -67,11 +80,6 @@ api.add_resource(GoogleLogin, "/google/login")
 api.add_resource(GoogleAuthorize, "/google/login/authorized")
 
 if __name__ == "__main__":
-    if app.debug:
-        restart_db()
-    else:
-        init_db()
-        
-    scheduler.start()
+    init_server()
     app.run(port=5000)
     
