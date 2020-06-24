@@ -1,4 +1,3 @@
-import axios from 'axios';
 import flows from '../apis/flows';
 import history from '../history';
 import { 
@@ -13,7 +12,7 @@ import {
 
 export const signUp = (formProps) => async dispatch => {
     try {
-        await axios.post('http://localhost:5000/signup', formProps);
+        await flows.post('/signup', formProps);
         history.push("/flows");
     } catch (e) {
         dispatch({ type: AUTH_ERROR, payload: "Email in use" });
@@ -38,7 +37,7 @@ export const logOut = () => {
 
 export const logIn = (formProps) => async dispatch => {
     try {
-        const response =  await axios.post('http://localhost:5000/login', formProps);
+        const response =  await flows.post('/login', formProps);
         const { access_token, refresh_token, user } = response.data
 
         dispatch({ type: AUTH_USER, payload: {
