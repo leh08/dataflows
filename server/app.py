@@ -37,6 +37,7 @@ configure_uploads(app, UPLOAD_SET)
 def init_server():
     if app.debug:
         restart_db()
+        
     else:
         init_db()
         
