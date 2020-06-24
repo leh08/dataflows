@@ -33,10 +33,6 @@ CORS(app)
 patch_request_class(app, 10 * 1024 * 1024 * 1024) # 10GB max size upload
 configure_uploads(app, UPLOAD_SET)
 
-@app.route('/')
-def home():
-    return 'Home'
-
 @app.before_first_request
 def init_server():
     if app.debug:
