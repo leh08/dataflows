@@ -5,9 +5,9 @@ from services.struct import Struct
 
 class S3(Flow):
     def discover(self):
-        objects = self.source.client.ls(self.report, detail=True)
-
         file_ids = []
+        
+        objects = self.source.client.ls(self.report, detail=True)
         
         for object in objects:
             struct = Struct(**object)
