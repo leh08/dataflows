@@ -43,7 +43,7 @@ class Flow:
         self.parser = get_parser(self.parser_name)
         self.store = get_store(self.store_name)
         
-        file_list = self.discover(self.report)
+        file_list = self.discover()
         processed_files = [log['file'] for log in self.logs if log.get('status') == 'Success']
         to_process = [file_id for file_id in file_list if file_id not in processed_files]
 
@@ -63,9 +63,8 @@ class Flow:
         # Check unprocessed files
         logger = self.logger
         logger.extra['file'] = file_id
-        file_name = self.generate_file_name(file_id)
-        blob_key = self.blob_root + 'log' + '/' + file_name
-        extension = re.search('[.].+$', file_name).group()
+        blob_key = self.blob_root + 'log' + '/' + file_id
+        extension = re.search('[.].+$', file_id).group()
         
         stream = self.extract(file_id)
         
@@ -83,11 +82,11 @@ class Flow:
         logger.info("File {} succeed to transform.".format(blob_key))
         
         if self.is_model:
-            blob_key = self.blob_root + 'model' + '/' + file_name
+            blob_key = self.blob_root + 'model' + '/' + file_id
             df = self.model(df) 
             
         else:
-            blob_key = self.blob_root + 'data' + '/' + file_name
+            blob_key = self.blob_root + 'data' + '/' + file_id
     
         return {file_id: self.load(df, blob_key)}
      
@@ -95,9 +94,6 @@ class Flow:
         raise NotImplementedError("Subclass must implement instance method")
     
     def extract(self, file_id):
-        raise NotImplementedError("Subclass must implement instance method")
-    
-    def generate_file_name(self):
         raise NotImplementedError("Subclass must implement instance method")
     
     def transform(self, stream):
