@@ -19,7 +19,7 @@ class PandasParser():
         
         skiprows = self.get_rows_to_skip(data, HEADER_END)
         skipfooter = self.get_footer_to_skip(data, FOOTER_END)
-        kwargs(
+        kwargs.update(dict(
             na_values = ['n.a.', '#ERROR!','None'],
             skiprows = skiprows,
             skipfooter = skipfooter
