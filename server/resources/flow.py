@@ -1,3 +1,4 @@
+import traceback
 from flask_restful import Resource
 from flask import request
 from flask_jwt_extended import get_jwt_identity, jwt_required
@@ -38,6 +39,12 @@ class FlowList(Resource):
         try:
             flow.save_to_db()
             flow_dict = flow.as_dict()
+            
+            if flow.authorization_id:
+                flow_dict['credential'] = flow.authorization.credential
+                
+            flow_dict['logs'] = flow.logs.all()
+
             flow_instance = create_flow(flow_dict)
 
             if flow.frequency:
@@ -46,6 +53,7 @@ class FlowList(Resource):
             flow_instance.run()
             
         except Exception as error:
+            traceback.print_exc()
             return {
                 "message": gettext("flow_error_inserting"),
                 "error": str(error)
