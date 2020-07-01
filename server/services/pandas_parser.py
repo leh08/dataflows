@@ -1,5 +1,4 @@
 from services.filesystem import FileSystem
-from typing import Dict
 import pandas as pd
 import io
 
@@ -12,7 +11,7 @@ class PandasParser():
         self.fs = FileSystem()
 
 
-    def parse_data(self, stream, extension, HEADER_END: str = None, FOOTER_END: str = None, params: Dict = dict()):
+    def parse_data(self, stream, extension, HEADER_END: str = None, FOOTER_END: str = None, **kwargs):
         """ Get the parsed output as a list of tuples representing records
         Pandas probably unnecessary here """
 
@@ -20,24 +19,24 @@ class PandasParser():
         
         skiprows = self.get_rows_to_skip(data, HEADER_END)
         skipfooter = self.get_footer_to_skip(data, FOOTER_END)
-        params.update(dict(
+        kwargs.update(dict(
             na_values = ['n.a.', '#ERROR!','None'],
             skiprows = skiprows,
             skipfooter = skipfooter
         ))
                                    
-        df = self.get_dataframe(data, extension, params)
+        df = self.get_dataframe(data, extension, kwargs)
         
         return df
 
     
     
-    def get_dataframe(self, data, extension, params):
+    def get_dataframe(self, data, extension, kwargs):
         if 'csv' in extension:
-            return pd.read_csv(io.StringIO(data), **params)
+            return pd.read_csv(io.StringIO(data), **kwargs)
         
         elif ["xls", "xlsx", "xlsm", "xlsb"] in extension:
-            return pd.read_excel(io.StringIO(data),  **params)
+            return pd.read_excel(io.StringIO(data),  **kwargs)
     
     
     def get_rows_to_skip(self, data, HEADER_END):
