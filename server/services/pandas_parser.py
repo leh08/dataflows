@@ -63,3 +63,16 @@ class PandasParser():
             for count, value in enumerate(reversed(data),start=1):
                 if FOOTER_END in value:
                     return count + 1
+                
+    def get_update(self, df, match_df, updating_columns):
+        df = df[updating_columns].drop_duplicates()
+        match_df = match_df[updating_columns].drop_duplicates()
+        
+        common = df.merge(match_df, on=updating_columns)
+
+        df = df.set_index(updating_columns, drop=False)
+        common = common.set_index(updating_columns, drop=False)
+
+        df = df[~df.index.isin(common.index)]
+
+        return df

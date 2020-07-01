@@ -38,7 +38,7 @@ class Flow:
 
     def run(self):
         self.logger = create_logger(self.name)
-        self.fs = FileSystem()
+        self.fs = FileSystem(authorization_name="Default")
         self.source = get_source(self.source_name, self.authorization.get('credential'))
         self.parser = get_parser(self.parser_name)
         self.store = get_store(self.store_name)

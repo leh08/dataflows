@@ -1,5 +1,5 @@
 from models.source import SourceModel
-from typing import Dict
+
 import s3fs
 import io
 
@@ -8,25 +8,24 @@ class FileSystem:
     def __init__(
         self,
         name: str = "S3",
-        credential: Dict = None,
-        authorization_name: str = "Default"
+        authorization_name: str = None
     ):
         self.name = name
-        source = SourceModel.find_by_name(name)
-        authorization = source.find_authorization_by_name(authorization_name)
-        self.credential = credential or authorization.credential if authorization else None
-        self.client = self.get_client()
+        self.client = self.get_client(authorization_name)
         
-    def get_client(self):
+    def get_client(self, authorization_name):
         if self.name == "S3":
-            if self.credential:
+            if authorization_name:
+                source = SourceModel.find_by_name(self.name)
+                authorization = source.find_authorization_by_name(authorization_name)
+                credential = authorization.credential if authorization else None
                 fs = s3fs.S3FileSystem(
-                    key=self.credential["aws_access_key_id"],
-                    secret=self.credential["aws_secret_access_key"]
+                    key=credential["aws_access_key_id"],
+                    secret=credential["aws_secret_access_key"]
                 )
                 
             else:
-                fs = s3fs.S3FileSystem(anon=True)
+                fs = s3fs.S3FileSystem(anon=False)
             
         else:
             ValueError("A filesystem, " + self.name + ", wasn't set up to run in this system.")
