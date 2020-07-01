@@ -1,5 +1,3 @@
-from models.source import SourceModel
-
 from typing import Dict
 import os
 import s3fs
@@ -11,29 +9,18 @@ class FileSystem:
         self,
         name: str = "S3",
         credential: Dict = None,
-        authorization_name: str = None
     ):
         self.name = name
-        self.client = self.get_client(credential, authorization_name)
+        self.client = self.get_client(credential)
         
-    def get_client(self, credential, authorization_name):
+    def get_client(self, credential):
         if self.name == "S3":
-            if credential is not None:
+            if credential:
                 return s3fs.S3FileSystem(
                     key=credential.get("aws_access_key_id"),
                     secret=credential.get("aws_secret_access_key")
                 )
-                
-            if authorization_name is not None:
-                source = SourceModel.find_by_name(self.name)
-                authorization = source.find_authorization_by_name(authorization_name)
-                if authorization:
-                    credential = authorization.credential 
-                    return s3fs.S3FileSystem(
-                        key=credential.get("aws_access_key_id"),
-                        secret=credential.get("aws_secret_access_key")
-                    )
-                
+
             else:
                 return s3fs.S3FileSystem(key=os.getenv("AWS_ACCESS_KEY_ID"), secret=os.getenv("AWS_SECRET_ACCESS_KEY"))
             
