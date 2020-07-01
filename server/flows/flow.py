@@ -15,31 +15,32 @@ from components.stores import get_store
 class Flow:
     def __init__(
         self, name, report, profile,
-        parser_name, store_name, is_model, schema,
+        parser_name, store_name, is_model, location,
         load_mode, frequency, hour, day,
-        sql_script, source_name, authorization, logs,
+        sql_script, source_name, logs,
         **kwargs
     ):  
         self.name = name
         self.report = report
         self.source_name = source_name
-        self.authorization = authorization
         self.profile = profile
         self.parser_name = parser_name
         self.is_model = is_model
         self.store_name = store_name
-        self.schema = schema
+        self.location = location
         self.load_mode = load_mode
         self.frequency = frequency
         self.hour = hour
         self.day = day
         self.sql_script = sql_script
         self.logs = logs
+        
+        self.credential = kwargs.get("credential")
 
     def run(self):
         self.logger = create_logger(self.name)
-        self.fs = FileSystem(authorization_name="Default")
-        self.source = get_source(self.source_name, self.authorization.get('credential'))
+        self.fs = FileSystem()
+        self.source = get_source(self.source_name, self.credential)
         self.parser = get_parser(self.parser_name)
         self.store = get_store(self.store_name)
         
@@ -49,7 +50,7 @@ class Flow:
 
         if to_process:
             self.logger.info("Found new report! Start to process.")
-            self.blob_root = "s3://" + os.environ["DATA_LAKE_NAME"] + '/' + self.schema + '/' + self.name + '/'
+            self.blob_root = "s3://" + os.environ["DATA_LAKE_NAME"] + '/' + self.location + '/' + self.name + '/'
             self.sql_table = None
             
             with ThreadPoolExecutor(max_workers=100) as executor:
@@ -87,8 +88,9 @@ class Flow:
             
         else:
             blob_key = self.blob_root + 'data' + '/' + file_id
-    
+        
         return {file_id: self.load(df, blob_key)}
+        
      
     def discover(self):
         raise NotImplementedError("Subclass must implement instance method")
@@ -122,7 +124,7 @@ class Flow:
             self.sql_table.to_sql(
                 staging_table_name,
                 con=self.store.engine,
-                schema=self.schema,
+                schema=self.location,
                 if_exists='replace',
                 index=False
             )
@@ -130,43 +132,46 @@ class Flow:
             self.sql_table.to_sql(
                 table_name,
                 con=self.store.engine,
-                schema=self.schema,
+                schema=self.location,
                 if_exists='append',
                 index=False
             )
-        return self.store.copy(staging_table_name, blob_key, columns, schema=self.schema)
-             
-    def verify(self, results):
-        table_name = self.name.lower()
-        staging_table_name = table_name + '_' + 'staging'
-        
-        schema = '"{}"'.format(self.schema)
-        table = '"{}"'.format(table_name)
-        staging_table = '"{}"'.format(staging_table_name)
-        columns = ', '.join('"{}"'.format(column) for column in self.sql_table.columns)
-        
-        try:
-            if self.load_mode == "Replace":
-                query = """
-                    DROP TABLE IF EXISTS {schema}.{table};
-                    ALTER TABLE {schema}.{staging_table} RENAME TO {table};
-                """.format(schema=schema, staging_table=staging_table, table=table)
-                self.store.execute(query)
-
-            elif self.load_mode == "Append":
-                query = """
-                    INSERT INTO {schema}.{table} ({columns})
-                    SELECT * FROM {schema}.{staging_table};
-                    DROP TABLE {schema}.{staging_table};
-                """.format(schema=schema, table=table, columns=columns, staging_table=staging_table)
-                self.store.execute(query)
-
-            else:
-                raise ValueError("A load mode, " + self.load_mode + ", wasn't set up to run in this system.")
+        if self.store.copy(staging_table_name, blob_key, columns, schema=self.location):
+            table_name = self.name.lower()
+            staging_table_name = table_name + '_' + 'staging'
+            
+            schema = '"{}"'.format(self.location)
+            table = '"{}"'.format(table_name)
+            staging_table = '"{}"'.format(staging_table_name)
+            columns = ', '.join('"{}"'.format(column) for column in self.sql_table.columns)
+            
+            try:
+                if self.load_mode == "Replace":
+                    query = """
+                        DROP TABLE IF EXISTS {schema}.{table};
+                        ALTER TABLE {schema}.{staging_table} RENAME TO {table};
+                    """.format(schema=schema, staging_table=staging_table, table=table)
+                    self.store.execute(query)
+                    return True
+    
+                elif self.load_mode == "Append":
+                    query = """
+                        INSERT INTO {schema}.{table} ({columns})
+                        SELECT * FROM {schema}.{staging_table};
+                        DROP TABLE {schema}.{staging_table};
+                    """.format(schema=schema, table=table, columns=columns, staging_table=staging_table)
+                    self.store.execute(query)
+                    return True
+    
+                else:
+                    raise ValueError("A load mode, " + self.load_mode + ", wasn't set up to run in this system.")
                 
-        except:
-            raise
-               
+            except:
+                raise
+
+        return False
+             
+    def verify(self, results):        
         for file_id, is_success in results.items():
             self.logger.extra['file'] = file_id
             if is_success:
