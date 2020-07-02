@@ -4,6 +4,8 @@ import { fetchFlows } from '../../actions';
 import { Link } from 'react-router-dom';
 import requireAuth from '../requireAuth';
 
+import { Cell, Column, Table } from "@blueprintjs/table";
+
 
 class FlowList extends React.Component {
     componentDidMount() {
@@ -52,7 +54,17 @@ class FlowList extends React.Component {
     render() {
         return (
             <div>
-                <h2>Flows</h2>
+                <h2 className="bp3-heading">Flows</h2>
+                <div className="bp3-button-group">
+                    <Link to="/flows/create" className="bp3-button bp3-icon-add">Create Flow</Link>
+                    <Link to="/flows/edit" className="bp3-button bp3-icon-edit">Edit</Link>
+                    <Link to="/flows/delete" className="bp3-button bp3-icon-trash">Delete</Link>
+                    <div className="bp3-button bp3-icon-segmented-control">
+                        Status <span class="bp3-icon-standard bp3-icon-caret-down bp3-align-right"></span>
+                    </div>
+                    <div class="bp3-button bp3-icon-walk">Run</div>
+                    <div class="bp3-button bp3-icon-history">Log</div>
+                </div>
                 <div className="ui celled list">{this.renderList()}</div>
                 {this.renderCreate()}
             </div>
