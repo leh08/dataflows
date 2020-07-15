@@ -16,7 +16,7 @@ class FlowModel(Base):
     parser_name = Column(String, default="Pandas")
     store_name = Column(String, default="Redshift") # Target: "Redshift", "S3-Only"
     is_model = Column(Boolean, default=False)
-    schema = Column(String, default='public')
+    location = Column(String, default='public')
     load_mode = Column(String, default='Replace') # Load mode: Append, Replace, Upsert
     frequency = Column(String) # Frequency: Daily, Weekly, Hours, Days, Weeks
     hour = Column(Integer)
