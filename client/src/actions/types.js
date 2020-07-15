@@ -5,3 +5,4 @@ export const FETCH_FLOWS = "FETCH_FLOWS";
 export const FETCH_FLOW = "FETCH_FLOW";
 export const DELETE_FLOW = "DELETE_FLOW";
 export const EDIT_FLOW = "EDIT_FLOW";
+export const FETCH_SOURCES = "FETCH_SOURCES";

@@ -8,6 +8,7 @@ import {
     FETCH_FLOW,
     DELETE_FLOW,
     EDIT_FLOW,
+    FETCH_SOURCES,
 } from './types';
 
 export const signUp = (formProps) => async dispatch => {
@@ -91,4 +92,10 @@ export const deleteFlow = (id) => async (dispatch) => {
 
     dispatch({ type: DELETE_FLOW, payload: id });
     history.push("/flows");
+};
+
+export const fetchSources = () => async (dispatch) => {
+    const response = await flows.get("/sources");
+
+    dispatch({ type: FETCH_SOURCES, payload: response.data });
 };

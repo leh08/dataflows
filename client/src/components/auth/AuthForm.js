@@ -5,6 +5,18 @@ import { Field, reduxForm } from 'redux-form';
 import flows from '../../apis/flows';
 import { logIn, logOut } from '../../actions';
 
+import { TextField, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+
+const useStyles = theme => ({
+    root: {
+        '& .MuiTextField-root': {
+          margin: theme.spacing(1.25),
+          width: 450,
+        },
+    },
+});
+
 
 class AuthForm extends React.Component {
     componentDidMount() {
@@ -29,23 +41,20 @@ class AuthForm extends React.Component {
         }
     }
 
-    renderError(error) {
-        return (
-            <div className="ui error message">
-                <div className="header">{error}</div>
-            </div>
-        );
-    }
-
-    renderInput = ({ input, label, type, autoComplete, meta }) => {
-        const className = `field ${meta.error && meta.touched ? 'error': ''}`
-        return (
-            <div className={className}>
-                <label>{label}</label>
-                <input {...input} type={type} autoComplete={autoComplete}/>
-                {(meta.touched && meta.error) ? this.renderError(meta.error): ""}
-            </div>
-        );
+    renderInput = ({ input, type, label, meta }) => {
+        if (meta.error && meta.touched) {
+            return (
+                <div>
+                    <TextField error helperText={meta.error} id="standard-error-helper-text" type={type} label={label} {...input} />
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    <TextField id="standard-basic" type={type} label={label} {...input} />
+                </div>
+            );
+        }
     }
 
     onSubmit = (formProps) => {
@@ -53,25 +62,25 @@ class AuthForm extends React.Component {
     }
 
     render() {
-        const { handleSubmit } = this.props;
+        const { classes, handleSubmit } = this.props;
+
         return (
-            <form onSubmit={handleSubmit(this.onSubmit)} className="ui form error">
+            <form onSubmit={handleSubmit(this.onSubmit)} className={classes.root} noValidate>
                 <Field
                     name="email"
                     component={this.renderInput}
                     type="text"
                     label="Email"
-                    autoComplete="on"
                 />
                 <Field
                     name="password"
                     type="password"
                     component={this.renderInput}
                     label="Password"
-                    autoComplete="off"
                 />
-                {(this.props.errorMessage) ? this.renderError(this.props.errorMessage): ""}
-                <button className="ui button primary">Submit</button>
+                <Button type="submit" variant="contained" size="large" color="primary">
+                    Submit
+                </Button>
             </form>
         );
     }
@@ -96,5 +105,6 @@ function mapStateToProps(state) {
 
 export default compose(
     connect(mapStateToProps , { logIn, logOut }),
-    reduxForm({ form: 'authForm', validate })
+    reduxForm({ form: 'authForm', validate }),
+    withStyles(useStyles)
 )(AuthForm);

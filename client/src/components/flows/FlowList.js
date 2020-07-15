@@ -1,62 +1,81 @@
 import React from 'react';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { fetchFlows } from '../../actions';
 import { Link } from 'react-router-dom';
 import requireAuth from '../requireAuth';
 
+import FlowItem from './FlowItem';
+import { ButtonGroup, Button, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+
+const useStyles = theme => ({
+    table: {
+        minWidth: 650,
+    },
+});
+
 
 class FlowList extends React.Component {
+    state = { selectedFlow: null };
+
     componentDidMount() {
         this.props.fetchFlows()
     }
 
+    onFlowSelect = (flow) => {
+        this.setState({ selectedFlow: flow });
+    };
+
     renderAdmin(flow) {
+        if (this.state.selectedFlow) {
+            return (
+                <ButtonGroup>
+                    <Button component={ Link } to={`/flows/edit/${this.state.selectedFlow.id}`}>Edit</Button>
+                    <Button component={ Link } to={`/flows/delete/${this.state.selectedFlow.id}`}>Delete</Button>
+                </ButtonGroup>
+            );
+        }
         return (
-            <div className="right floated content">
-                <Link to={`/flows/edit/${flow.id}`} className="ui button primary">
-                    Edit
-                </Link>
-                <Link to={`/flows/delete/${flow.id}`} className="ui button negative">
-                    Delete
-                </Link>
-            </div>
+            <ButtonGroup>
+                <Button disabled>Edit</Button>
+                <Button disabled>Delete</Button>
+            </ButtonGroup>
         );
     }
 
     renderList() {
-        return this.props.flows.map(flow => {
-            return (
-                <div className="item" key={flow.id}>
-                    {this.renderAdmin(flow)}
-                    <div className="content">
-                        <Link to={`/flows/${flow.id}`}>
-                            {flow.name}
-                        </Link>
-                        <div className="description">{flow.report}</div>
-                    </div>
-                </div>
-            );
-        });
-    }
-
-    renderCreate() {
-        if (this.props.isSignedIn) {
-            return  (
-                <div style={{textAlign: 'right'}}>
-                    <Link to="/flows/create" className="ui button primary">Create Flow</Link>
-                </div>
-            );
-        }
+        const { classes } = this.props;
+        return (
+            <TableContainer component={Paper}>
+                <Table className={classes.table} aria-label="simple table">
+                <TableHead>
+                    <TableRow>
+                        <TableCell>ID</TableCell>
+                        <TableCell>Name</TableCell>
+                        <TableCell>Report</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {
+                        this.props.flows.map(flow => {
+                            return <FlowItem onFlowSelect={this.onFlowSelect} flow={flow} key={flow.id} />})
+                    }
+                </TableBody>
+                </Table>
+            </TableContainer>
+        );
     }
 
     render() {
         return (
             <div>
-                <h2>Flows</h2>
-                <div className="ui celled list">{this.renderList()}</div>
-                {this.renderCreate()}
+                <ButtonGroup aria-label="outlined primary button group">
+                    <Button component={ Link } to="/flows/create">Create Flow</Button>
+                    {this.renderAdmin()}
+                </ButtonGroup>
+                {this.renderList()}
             </div>
-            
         );
     }
 };
@@ -65,8 +84,12 @@ const mapStateToProps = (state) => {
     return { 
         flows: Object.values(state.flows),
         currentUserId: state.auth.userId,
-        isSignedIn: state.auth.isSignedIn
+        isSignedIn: state.auth.isSignedIn,
     };
 };
 
-export default connect(mapStateToProps, { fetchFlows })(requireAuth(FlowList));
+export default compose(
+    connect(mapStateToProps, { fetchFlows }),
+    requireAuth,
+    withStyles(useStyles)
+)(FlowList);
