@@ -7,6 +7,10 @@ from models.authorization import AuthorizationModel
 from configurations.auths.oauth import oauth_configs
 
 
+"""
+Use this OAuth Standard Library when you cannot use SDK.
+"""
+
 class OAuth:
     def __init__(
         self,
