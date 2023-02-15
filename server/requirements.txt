@@ -4,7 +4,7 @@ Alembic
 Marshmallow
 Marshmallow-SQLAlchemy
 Flask
-Werkzeug==0.16.0
+Werkzeug==2.2.3
 Flask-RESTful
 Flask-CORS
 Flask-JWT-Extended
